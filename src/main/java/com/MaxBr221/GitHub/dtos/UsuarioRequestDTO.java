@@ -1,0 +1,12 @@
+package com.MaxBr221.GitHub.dtos;
+
+import com.MaxBr221.GitHub.model.Role;
+
+public record UsuarioRequestDTO(
+        String nome,
+        String login,
+        String senha,
+        String telefone,
+        Role role
+) {
+}

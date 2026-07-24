@@ -6,23 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Servico {
+public class AtendimentoServico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "atendimento_id")
+    private Atendimento atendimento;
+    @ManyToOne
+    @JoinColumn(name = "servico_id")
+    private Servico servico;
     @Column(nullable = false)
-    private String nome;
-    @Column(nullable = false)
-    private double preco;
-    @Enumerated(EnumType.STRING)
-    private Status status;
-    private String descricao;
-
+    private double total;
 
 }
