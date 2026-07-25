@@ -1,10 +1,12 @@
 package com.MaxBr221.GitHub.model;
 
+import com.MaxBr221.GitHub.dtos.auth.Cadastro;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
 @Entity
 @Getter
@@ -24,5 +26,9 @@ public class Usuario {
     private String telefone;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Usuario(Cadastro cadastro){
+        BeanUtils.copyProperties(cadastro, this);
+    }
 
 }
