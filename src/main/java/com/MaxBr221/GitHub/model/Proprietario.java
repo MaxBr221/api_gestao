@@ -13,7 +13,8 @@ import org.springframework.beans.BeanUtils;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario {
+public class Proprietario {
+    //admin
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +28,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public Usuario(Cadastro cadastro){
+    public Proprietario(Cadastro cadastro){
         BeanUtils.copyProperties(cadastro, this);
     }
 

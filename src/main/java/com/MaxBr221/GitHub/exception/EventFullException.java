@@ -8,4 +8,5 @@ public class EventFullException extends RuntimeException{
     public EventFullException(String messagem){
         super(messagem);
     }
+
 }

@@ -16,6 +16,7 @@ public class AtendimentoServico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    //recebe a chave estrangeira
     @JoinColumn(name = "atendimento_id")
     private Atendimento atendimento;
     @ManyToOne

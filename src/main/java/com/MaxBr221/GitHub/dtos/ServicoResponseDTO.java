@@ -1,5 +1,6 @@
 package com.MaxBr221.GitHub.dtos;
 
+import com.MaxBr221.GitHub.model.Servico;
 import com.MaxBr221.GitHub.model.Status;
 
 public record ServicoResponseDTO(
@@ -9,4 +10,7 @@ public record ServicoResponseDTO(
         Status status,
         String descricao
 ) {
+    public ServicoResponseDTO(Servico servico){
+        this(servico.getId(), servico.getNome(), servico.getPreco(), servico.getStatus(), servico.getDescricao());
+    }
 }

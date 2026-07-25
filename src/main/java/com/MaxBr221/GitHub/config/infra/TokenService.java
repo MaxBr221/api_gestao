@@ -1,6 +1,6 @@
 package com.MaxBr221.GitHub.config.infra;
 
-import com.MaxBr221.GitHub.model.Usuario;
+import com.MaxBr221.GitHub.model.Proprietario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -17,7 +17,7 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public DadosTokenJWT createToken(Usuario usuario){
+    public DadosTokenJWT createToken(Proprietario usuario){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             var dadosToken = getExpiration();
@@ -37,7 +37,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("barbearia-api")
+                    .withIssuer("api-gestao")
                     .build()
                     .verify(token)
                     .getSubject();

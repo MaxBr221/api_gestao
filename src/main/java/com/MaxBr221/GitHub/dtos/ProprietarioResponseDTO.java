@@ -1,14 +1,13 @@
 package com.MaxBr221.GitHub.dtos;
 
-import com.MaxBr221.GitHub.model.Role;
-import com.MaxBr221.GitHub.model.Usuario;
+import com.MaxBr221.GitHub.model.Proprietario;
 
-public record UsuarioResponseDTO(
+public record ProprietarioResponseDTO(
         Long id,
         String nome,
         String login,
         String telefone) {
-    public UsuarioResponseDTO(Usuario usuario){
+    public ProprietarioResponseDTO(Proprietario usuario){
         this(usuario.getId(), usuario.getNome(), usuario.getLogin(), usuario.getTelefone());
     }
 }

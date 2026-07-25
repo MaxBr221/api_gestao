@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,13 +24,15 @@ public class Atendimento {
     @JoinColumn(name = "barbeiro_id")
     private Barbeiro barbeiro;
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    @JoinColumn(name = "proprietario_id")
+    private Proprietario proprietario;
     @Enumerated(EnumType.STRING)
     private FormaPagamento formaPagamento;
     @Column(nullable = false)
     private double valor;
     private String observacao;
+    @OneToMany(mappedBy = "atendimentos", cascade = CascadeType.ALL)
+    private List<AtendimentoServico> atendimentos;
 
 
 
