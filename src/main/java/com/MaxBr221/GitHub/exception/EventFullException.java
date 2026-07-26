@@ -9,4 +9,5 @@ public class EventFullException extends RuntimeException{
         super(messagem);
     }
 
+
 }

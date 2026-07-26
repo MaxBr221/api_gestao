@@ -5,6 +5,7 @@ import com.MaxBr221.GitHub.dtos.BarbeiroResponseDTO;
 import com.MaxBr221.GitHub.dtos.ProprietarioRequestDTO;
 import com.MaxBr221.GitHub.dtos.ProprietarioResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
+import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Barbeiro;
 import com.MaxBr221.GitHub.model.Proprietario;
 import com.MaxBr221.GitHub.repository.BarbeiroRepository;
@@ -32,7 +33,7 @@ public class ProprietarioService {
     }
     public ProprietarioResponseDTO findById(Long id){
         Proprietario usuario = proprietarioRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Usuário não encontrado!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
         return new ProprietarioResponseDTO(usuario);
     }
     public List<ProprietarioResponseDTO> findAll(){
@@ -43,13 +44,13 @@ public class ProprietarioService {
     }
     public void delete(Long id){
         Proprietario usuario = proprietarioRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Usuário não encontrado!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
 
         proprietarioRepository.delete(usuario);
     }
     public ProprietarioResponseDTO update(Long id, ProprietarioRequestDTO userDTO){
         Proprietario usuarioBuscado = proprietarioRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Usuário não encontrado!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
         usuarioBuscado.setNome(userDTO.nome());
         usuarioBuscado.setTelefone(userDTO.telefone());
         //add set para mudar senha e login

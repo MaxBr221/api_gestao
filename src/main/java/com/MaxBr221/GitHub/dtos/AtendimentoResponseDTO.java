@@ -1,16 +1,27 @@
 package com.MaxBr221.GitHub.dtos;
 
-import com.MaxBr221.GitHub.model.FormaPagamento;
+import com.MaxBr221.GitHub.model.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record AtendimentoResponseDTO(
         Long id,
         LocalDateTime dataServico,
-        String barbeiro,
-        String usuario,
+        Barbeiro barbeiro,
+        Proprietario proprietario,
         FormaPagamento formaPagamento,
         double valor,
-        String observacao
+        String observacao,
+        List<AtendimentoServico> atendimentos
 ) {
+    public AtendimentoResponseDTO(Atendimento atendimento){
+        this(atendimento.getIdAtendimento(), atendimento.getDataServico(),
+                atendimento.getBarbeiro(),
+                atendimento.getProprietario(),
+                atendimento.getFormaPagamento(),
+                atendimento.getValor(),
+                atendimento.getObservacao(),
+                atendimento.getAtendimentos());
+    }
 }

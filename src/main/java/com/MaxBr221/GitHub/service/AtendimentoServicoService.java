@@ -3,6 +3,7 @@ package com.MaxBr221.GitHub.service;
 import com.MaxBr221.GitHub.dtos.AtendimentoServicoRequestDTO;
 import com.MaxBr221.GitHub.dtos.AtendimentoServicoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
+import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.AtendimentoServico;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 public class AtendimentoServicoService {
     private final AtendimentoServicoRepository atendimentoServicoRepository;
 
-    public AtendimentoServicoResponseDTO atendimentoResponseDTO(AtendimentoServicoRequestDTO atendimento){
+    public AtendimentoServicoResponseDTO create(AtendimentoServicoRequestDTO atendimento){
         if(atendimentoServicoRepository.existsById(atendimento.atendimentoId())){
             throw new EventFullException("Atendimento já criado!");
         }
@@ -29,7 +30,7 @@ public class AtendimentoServicoService {
     }
     public AtendimentoServicoResponseDTO findById(Long id){
         AtendimentoServico atendimentoServico = atendimentoServicoRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Atendimento não encotrado!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
         return new AtendimentoServicoResponseDTO(atendimentoServico);
     }
     public List<AtendimentoServicoResponseDTO> findAll(){
@@ -40,7 +41,7 @@ public class AtendimentoServicoService {
     }
     public void delete(Long id){
         AtendimentoServico atendimentoServico = atendimentoServicoRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Atendimento não encotrado!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
         atendimentoServicoRepository.delete(atendimentoServico);
     }
 

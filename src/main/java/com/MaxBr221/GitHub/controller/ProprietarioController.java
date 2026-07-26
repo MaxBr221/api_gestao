@@ -1,0 +1,24 @@
+package com.MaxBr221.GitHub.controller;
+
+import com.MaxBr221.GitHub.dtos.ProprietarioRequestDTO;
+import com.MaxBr221.GitHub.dtos.ProprietarioResponseDTO;
+import com.MaxBr221.GitHub.service.ProprietarioService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/proprietario")
+@RequiredArgsConstructor
+@Slf4j
+public class ProprietarioController {
+    private final ProprietarioService proprietarioService;
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProprietarioResponseDTO> findById(@PathVariable Long id, @RequestBody ProprietarioRequestDTO proprietarioDTO){
+        ProprietarioResponseDTO proprietario = proprietarioService.update(id, proprietarioDTO);
+        log.info("Atualizando proprietário!");
+        return ResponseEntity.ok(proprietario);
+    }
+}

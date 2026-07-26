@@ -3,6 +3,7 @@ package com.MaxBr221.GitHub.service;
 import com.MaxBr221.GitHub.dtos.ServicoRequestDTO;
 import com.MaxBr221.GitHub.dtos.ServicoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
+import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Servico;
 import com.MaxBr221.GitHub.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,12 @@ public class ServicoService {
     }
     public void delete(Long id){
         Servico servico = servicoRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Serviço não existente!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Serviço não existente!"));
         servicoRepository.delete(servico);
     }
     public ServicoResponseDTO findById(Long id){
         Servico servico = servicoRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Serviço não existente!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Serviço não existente!"));
 
         return new ServicoResponseDTO(servico);
     }
@@ -45,7 +46,7 @@ public class ServicoService {
     }
     public ServicoResponseDTO update(Long id, ServicoRequestDTO servicoRequestDTO){
         Servico servico = servicoRepository.findById(id)
-                .orElseThrow(()-> new EventFullException("Serviço não existente!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Serviço não existente!"));
 
         servico.setDescricao(servicoRequestDTO.descricao());
         servico.setNome(servicoRequestDTO.nome());
