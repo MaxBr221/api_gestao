@@ -1,7 +1,7 @@
 package com.MaxBr221.GitHub.service;
 
-import com.MaxBr221.GitHub.dtos.AtendimentoRequestDTO;
-import com.MaxBr221.GitHub.dtos.AtendimentoResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoRequestDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Atendimento;
@@ -63,5 +63,6 @@ public class AtendimentoService {
         Atendimento atendimentoSalvo = atendimentoRepository.save(atendimento);
         return new AtendimentoResponseDTO(atendimentoSalvo);
     }
+    // funcionalidade de listar atendimentos por um dia especifico
 
 }

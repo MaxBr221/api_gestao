@@ -1,7 +1,7 @@
 package com.MaxBr221.GitHub.service;
 
-import com.MaxBr221.GitHub.dtos.BarbeiroRequestDTO;
-import com.MaxBr221.GitHub.dtos.BarbeiroResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.BarbeiroRequestDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.BarbeiroResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Barbeiro;

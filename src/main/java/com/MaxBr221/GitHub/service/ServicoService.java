@@ -1,7 +1,7 @@
 package com.MaxBr221.GitHub.service;
 
-import com.MaxBr221.GitHub.dtos.ServicoRequestDTO;
-import com.MaxBr221.GitHub.dtos.ServicoResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRequestDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Servico;

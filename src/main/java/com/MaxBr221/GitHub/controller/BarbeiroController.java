@@ -1,10 +1,8 @@
 package com.MaxBr221.GitHub.controller;
 
-import com.MaxBr221.GitHub.dtos.BarbeiroRequestDTO;
-import com.MaxBr221.GitHub.dtos.BarbeiroResponseDTO;
-import com.MaxBr221.GitHub.model.Barbeiro;
+import com.MaxBr221.GitHub.dtos.entitysDTO.BarbeiroRequestDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.BarbeiroResponseDTO;
 import com.MaxBr221.GitHub.service.BarbeiroService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

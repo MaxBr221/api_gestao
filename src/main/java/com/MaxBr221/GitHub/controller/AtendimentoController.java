@@ -1,7 +1,7 @@
 package com.MaxBr221.GitHub.controller;
 
-import com.MaxBr221.GitHub.dtos.AtendimentoRequestDTO;
-import com.MaxBr221.GitHub.dtos.AtendimentoResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoRequestDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoResponseDTO;
 import com.MaxBr221.GitHub.service.AtendimentoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

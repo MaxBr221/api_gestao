@@ -1,6 +1,6 @@
 package com.MaxBr221.GitHub.model;
 
-import com.MaxBr221.GitHub.dtos.auth.Cadastro;
+import com.MaxBr221.GitHub.dtos.authDTO.Cadastro;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

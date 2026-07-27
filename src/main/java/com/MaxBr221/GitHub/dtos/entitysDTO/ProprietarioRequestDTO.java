@@ -1,4 +1,4 @@
-package com.MaxBr221.GitHub.dtos;
+package com.MaxBr221.GitHub.dtos.entitysDTO;
 
 import com.MaxBr221.GitHub.model.Role;
 
