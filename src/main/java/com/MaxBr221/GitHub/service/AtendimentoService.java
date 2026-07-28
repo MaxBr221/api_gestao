@@ -13,6 +13,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -64,5 +67,18 @@ public class AtendimentoService {
         return new AtendimentoResponseDTO(atendimentoSalvo);
     }
     // funcionalidade de listar atendimentos por um dia especifico
+    public List<AtendimentoResponseDTO> listarAtendimentos(LocalDate dataAtendimento){
 
+        LocalDateTime incio = dataAtendimento.atStartOfDay();
+        LocalDateTime fim = dataAtendimento.atTime(LocalTime.MAX);
+        List<Atendimento> atendimentosList = atendimentoRepository.findByDataServicoBetween(incio, fim);
+
+        if(atendimentosList.isEmpty()){
+            throw new ResourceNotFoundException("Atendimentos não existente nessa data!");
+        }
+        return atendimentosList
+                .stream()
+                .map(AtendimentoResponseDTO::new)
+                .toList();
+    }
 }
