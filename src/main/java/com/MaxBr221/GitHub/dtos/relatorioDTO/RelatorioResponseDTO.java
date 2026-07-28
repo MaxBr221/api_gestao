@@ -1,4 +1,6 @@
 package com.MaxBr221.GitHub.dtos.relatorioDTO;
 
-public record RelatorioResponseDTO(double faturamento, int quantAtendimentos, String servicoMaiorFrequencia) {
+import java.math.BigDecimal;
+
+public record RelatorioResponseDTO(BigDecimal faturamento, int quantAtendimentos, String servicoMaiorFrequencia) {
 }

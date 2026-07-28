@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Table
 @Entity
 @Getter
@@ -19,7 +21,7 @@ public class Servico {
     @Column(nullable = false)
     private String nome;
     @Column(nullable = false)
-    private double preco;
+    private BigDecimal preco;
     @Enumerated(EnumType.STRING)
     private Status status;
     private String descricao;

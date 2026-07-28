@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +26,6 @@ public class AtendimentoServico {
     @JoinColumn(name = "servico_id")
     private Servico servico;
     @Column(nullable = false)
-    private double total;
+    private BigDecimal total;
 
 }

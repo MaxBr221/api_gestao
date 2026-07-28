@@ -24,7 +24,7 @@ public class AtendimentoService {
     //só admin (proprietario) manipula tudo
     @Transactional
     public AtendimentoResponseDTO create(AtendimentoRequestDTO atendimentoRequestDTO){
-        if(atendimentoRepository.existsByData(atendimentoRequestDTO.data())){
+        if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
             throw new EventFullException("Data de atendimento já ocupada!");
         }
         Barbeiro barbeiro = barbeiroRepository.findById(atendimentoRequestDTO.barbeiroId())
@@ -54,7 +54,7 @@ public class AtendimentoService {
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
 
-        if(atendimentoRepository.existsByData(atendimentoRequestDTO.data())){
+        if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
             throw new EventFullException("Data de atendimento já ocupada!");
         }
         atendimento.setObservacao(atendimentoRequestDTO.observacao());

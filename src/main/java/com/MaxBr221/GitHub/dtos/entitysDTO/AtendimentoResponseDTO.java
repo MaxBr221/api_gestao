@@ -2,6 +2,7 @@ package com.MaxBr221.GitHub.dtos.entitysDTO;
 
 import com.MaxBr221.GitHub.model.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public record AtendimentoResponseDTO(
         Barbeiro barbeiro,
         Proprietario proprietario,
         FormaPagamento formaPagamento,
-        double valor,
+        BigDecimal valor,
         String observacao,
         List<AtendimentoServico> atendimentos
 ) {

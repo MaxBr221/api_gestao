@@ -4,9 +4,11 @@ import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Atendimento;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
+import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,9 +17,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RelatorioService {
-    private final AtendimentoService atendimentoService;
+    private final AtendimentoServicoRepository atendimentoServicoRepository;
     private final AtendimentoRepository atendimentoRepository;
-
 
     public RelatorioResponseDTO relatorioDiario(){
 
@@ -60,12 +61,12 @@ public class RelatorioService {
             throw new ResourceNotFoundException("Nenhum atendimento ainda!");
         }
         int contAtendimentos = 0;
-        double faturamentoRelatorio = 0;
+        BigDecimal faturamentoRelatorio = BigDecimal.ZERO;
         for(Atendimento a: atendimentos){
-            faturamentoRelatorio += a.getValor();
+            faturamentoRelatorio = faturamentoRelatorio.add(a.getValor());
             contAtendimentos ++;
         }
-        String atendimentoMaisFrequente = atendimentoRepository.findServicoMaisRealizado(incio, fim);
+        String atendimentoMaisFrequente = atendimentoServicoRepository.findServicoMaisRealizado(incio, fim);
         return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, atendimentoMaisFrequente);
     }
 

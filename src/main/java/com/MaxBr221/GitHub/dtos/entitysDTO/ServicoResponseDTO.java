@@ -3,10 +3,12 @@ package com.MaxBr221.GitHub.dtos.entitysDTO;
 import com.MaxBr221.GitHub.model.Servico;
 import com.MaxBr221.GitHub.model.Status;
 
+import java.math.BigDecimal;
+
 public record ServicoResponseDTO(
         Long id,
         String nome,
-        double preco,
+        BigDecimal preco,
         Status status,
         String descricao
 ) {
