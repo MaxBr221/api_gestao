@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -53,5 +54,11 @@ public class AtendimentoController {
         AtendimentoResponseDTO atendimento = atendimentoService.update(id, atendimentoRequestDTO);
         log.info("Atendimento {} atualizado.", atendimento.id());
         return ResponseEntity.ok(atendimento);
+    }
+    @GetMapping("/data")
+    public ResponseEntity<List<AtendimentoResponseDTO>> listAtendimentos(@RequestParam LocalDate data){
+        List<AtendimentoResponseDTO> atendimentos = atendimentoService.listarAtendimentos(data);
+        log.info("Listando atendimentos da data: {}", data);
+        return ResponseEntity.ok(atendimentos);
     }
 }
