@@ -18,9 +18,9 @@ public class ServicoService {
     public final ServicoRepository servicoRepository;
 
     public ServicoResponseDTO create(ServicoRequestDTO servicoRequestDTO){
-        Servico servico = servicoRepository.findByNome(servicoRequestDTO.nome())
-                .orElseThrow(()-> new EventFullException("Serviço já cadastrado!"));
-
+        if(servicoRepository.existsByNome(servicoRequestDTO.nome())){
+            throw new EventFullException("Serviço já cadastrado!");
+        }
         Servico novoServico = new Servico();
         BeanUtils.copyProperties(servicoRequestDTO, novoServico);
         Servico servicoSalvo = servicoRepository.save(novoServico);

@@ -38,6 +38,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> Unauthorized(UnauthorizedException ex){
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+
+                HttpStatus.UNAUTHORIZED.value(),
+
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
 
 
 

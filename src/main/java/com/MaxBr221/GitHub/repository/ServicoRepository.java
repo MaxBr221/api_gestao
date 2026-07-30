@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ServicoRepository extends JpaRepository<Servico, Long> {
     Optional<Servico> findByNome(String nome);
+    boolean existsByNome(String nome);
 }
