@@ -17,13 +17,13 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public DadosTokenJWT createToken(Proprietario usuario){
+    public DadosTokenJWT createToken(Proprietario proprietario){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             var dadosToken = getExpiration();
             String token = JWT.create()
                     .withIssuer("api-gestao")
-                    .withSubject(usuario.getLogin())
+                    .withSubject(proprietario.getLogin())
                     .withExpiresAt(getExpiration())
                     .sign(algorithm);
             Long segundosExpiracao = dadosToken.getEpochSecond();

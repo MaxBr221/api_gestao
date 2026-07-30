@@ -55,4 +55,7 @@ public class ProprietarioService {
         return new ProprietarioResponseDTO(userSalvo);
     }
 
+    //criar novas funcionalidades de verPerfil
+    //editar senha
+
 }
