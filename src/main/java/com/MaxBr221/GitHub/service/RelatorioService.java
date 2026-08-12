@@ -57,9 +57,6 @@ public class RelatorioService {
     }
 
     private RelatorioResponseDTO montarRelatorio(List<Atendimento> atendimentos, LocalDateTime incio, LocalDateTime fim){
-        if(atendimentos.isEmpty()){
-            throw new ResourceNotFoundException("Nenhum atendimento ainda!");
-        }
         int contAtendimentos = 0;
         BigDecimal faturamentoRelatorio = BigDecimal.ZERO;
         for(Atendimento a: atendimentos){
