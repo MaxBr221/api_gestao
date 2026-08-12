@@ -55,4 +55,11 @@ public class ServicoService {
         Servico servicoSalvo = servicoRepository.save(servico);
         return new ServicoResponseDTO(servicoSalvo);
     }
+    public String servicoMaisRealizado(){
+        return servicoRepository.findServicosMaisRealizados()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+    }
 }

@@ -54,4 +54,10 @@ public class ServicoController {
         log.info("Serviço {} atualizado.", servico.id());
         return ResponseEntity.ok(servico);
     }
+    @GetMapping("/maisRealizado")
+    public ResponseEntity<String> maisRealizado(){
+        var servicoMaisRealizado = servicoService.servicoMaisRealizado();
+        log.info("Exibindo Servico mais realizado, {}", servicoMaisRealizado);
+        return ResponseEntity.ok(servicoMaisRealizado);
+    }
 }
