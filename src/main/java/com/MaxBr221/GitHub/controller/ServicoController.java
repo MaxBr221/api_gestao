@@ -1,5 +1,6 @@
 package com.MaxBr221.GitHub.controller;
 
+import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRealizadoDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRequestDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoResponseDTO;
 import com.MaxBr221.GitHub.service.ServicoService;
@@ -54,10 +55,10 @@ public class ServicoController {
         log.info("Serviço {} atualizado.", servico.id());
         return ResponseEntity.ok(servico);
     }
-    @GetMapping("/maisRealizado")
-    public ResponseEntity<String> maisRealizado(){
-        var servicoMaisRealizado = servicoService.servicoMaisRealizado();
-        log.info("Exibindo Servico mais realizado, {}", servicoMaisRealizado);
-        return ResponseEntity.ok(servicoMaisRealizado);
+    @GetMapping("/maisRealizados")
+    public ResponseEntity<List<ServicoRealizadoDTO>> servicosMaisRealizados(){
+        List<ServicoRealizadoDTO> servicos = servicoService.servicosMaisRealizados();
+        log.info("Listando servicos mais realizados!");
+        return ResponseEntity.ok(servicos);
     }
 }

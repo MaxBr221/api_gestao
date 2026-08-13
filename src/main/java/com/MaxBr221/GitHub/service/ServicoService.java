@@ -1,5 +1,6 @@
 package com.MaxBr221.GitHub.service;
 
+import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRealizadoDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRequestDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
@@ -55,11 +56,13 @@ public class ServicoService {
         Servico servicoSalvo = servicoRepository.save(servico);
         return new ServicoResponseDTO(servicoSalvo);
     }
-    public String servicoMaisRealizado(){
-        return servicoRepository.findServicosMaisRealizados()
+    public List<ServicoRealizadoDTO> servicosMaisRealizados(){
+        return servicoRepository.servicosMaisRealizados()
                 .stream()
-                .findFirst()
-                .orElse(null);
-
+                .map(servicos -> new ServicoRealizadoDTO(
+                        (String) servicos[0],
+                        (Long) servicos[1]
+                ))
+                .toList();
     }
 }

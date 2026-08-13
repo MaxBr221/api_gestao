@@ -11,10 +11,13 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     Optional<Servico> findByNome(String nome);
     boolean existsByNome(String nome);
     @Query("""
-    SELECT ats.servico.nome
+    SELECT s.nome, COUNT(ats)
     FROM AtendimentoServico ats
-    GROUP BY ats.servico.nome
+    JOIN ats.servico s
+    GROUP BY s.nome
     ORDER BY COUNT(ats) DESC
-    """)
-    List<String> findServicosMaisRealizados();
+""")
+    List<Object[]> servicosMaisRealizados();
+
+
 }
