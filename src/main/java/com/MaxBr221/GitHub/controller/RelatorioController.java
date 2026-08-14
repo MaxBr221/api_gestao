@@ -1,5 +1,6 @@
 package com.MaxBr221.GitHub.controller;
 
+import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
 import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.service.RelatorioService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/relatorio")
@@ -33,6 +36,12 @@ public class RelatorioController {
         RelatorioResponseDTO relatorioResponseDTO = relatorioService.relatorioAnual();
         log.info("Listando relatorio anual!");
         return ResponseEntity.ok(relatorioResponseDTO);
+    }
+    @GetMapping("/semanal")
+    public ResponseEntity<List<RelatorioSemanalResponseDTO>> relatoriosemanal(){
+        List<RelatorioSemanalResponseDTO> relatorioSemanalDTO = relatorioService.relatorioSemanal();
+        log.info("Listando relatorio semanal!");
+        return ResponseEntity.ok(relatorioSemanalDTO);
     }
 
 }

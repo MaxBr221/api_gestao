@@ -56,13 +56,5 @@ public class ServicoService {
         Servico servicoSalvo = servicoRepository.save(servico);
         return new ServicoResponseDTO(servicoSalvo);
     }
-    public List<ServicoRealizadoDTO> servicosMaisRealizados(){
-        return servicoRepository.servicosMaisRealizados()
-                .stream()
-                .map(servicos -> new ServicoRealizadoDTO(
-                        (String) servicos[0],
-                        (Long) servicos[1]
-                ))
-                .toList();
-    }
+
 }

@@ -1,7 +1,7 @@
 package com.MaxBr221.GitHub.service;
 
+import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
 import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
-import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Atendimento;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
@@ -9,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +59,37 @@ public class RelatorioService {
 
         return montarRelatorio(atendimentosDoMes, primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
     }
+    public List<RelatorioSemanalResponseDTO> relatorioSemanal(){
+        LocalDate hoje = LocalDate.now();
+        LocalDate segunda = hoje.with(
+                TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
+        );
+        LocalDate domingo = segunda.plusDays(6);
+
+        return faturamentoSemanal(segunda, domingo);
+    }
+
+    private List<RelatorioSemanalResponseDTO> faturamentoSemanal(LocalDate segunda, LocalDate domingo){
+
+        List<Atendimento> atendimentoSemanais = atendimentoRepository.findByDataServicoBetween(
+                segunda.atStartOfDay(), domingo.atTime(LocalTime.MAX));
+
+        Map<DayOfWeek, BigDecimal> faturamentoPorDia = atendimentoSemanais.stream()
+                .collect(Collectors.groupingBy(
+                        atendimento -> atendimento.getDataServico().getDayOfWeek(),
+                        Collectors.reducing(
+                                BigDecimal.ZERO,
+                                Atendimento::getValor,
+                                BigDecimal::add
+                        )
+                ));
+        List<RelatorioSemanalResponseDTO> relatorios = faturamentoPorDia.entrySet()
+                .stream()
+                .map(atendimento -> new RelatorioSemanalResponseDTO(
+                        atendimento.getKey() ,atendimento.getValue()))
+                .toList();
+        return relatorios;
+    }
 
     private RelatorioResponseDTO montarRelatorio(List<Atendimento> atendimentos, LocalDateTime incio, LocalDateTime fim){
         int contAtendimentos = 0;
@@ -66,6 +101,5 @@ public class RelatorioService {
         String atendimentoMaisFrequente = atendimentoServicoRepository.findServicoMaisRealizado(incio, fim);
         return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, atendimentoMaisFrequente);
     }
-
 
 }
