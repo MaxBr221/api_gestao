@@ -56,5 +56,5 @@ public class ServicoService {
         Servico servicoSalvo = servicoRepository.save(servico);
         return new ServicoResponseDTO(servicoSalvo);
     }
-
+    
 }

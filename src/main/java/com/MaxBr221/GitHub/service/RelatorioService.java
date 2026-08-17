@@ -1,8 +1,10 @@
 package com.MaxBr221.GitHub.service;
 
 import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.ServicosRealizado;
 import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.model.Atendimento;
+import com.MaxBr221.GitHub.model.AtendimentoServico;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
 import lombok.RequiredArgsConstructor;
@@ -101,5 +103,14 @@ public class RelatorioService {
         String atendimentoMaisFrequente = atendimentoServicoRepository.findServicoMaisRealizado(incio, fim);
         return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, atendimentoMaisFrequente);
     }
+    public List<ServicosRealizado> servicosRealizadoHoje(){
+        LocalDate hoje = LocalDate.now();
+
+        LocalDateTime inicio = hoje.atStartOfDay();
+        LocalDateTime fim = hoje.atTime(LocalTime.MAX);
+
+        return atendimentoServicoRepository.findServicoRealizadoHoje(inicio, fim);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.MaxBr221.GitHub.controller;
 
 import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.ServicosRealizado;
 import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.service.RelatorioService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,12 @@ public class RelatorioController {
         List<RelatorioSemanalResponseDTO> relatorioSemanalDTO = relatorioService.relatorioSemanal();
         log.info("Listando relatorio semanal!");
         return ResponseEntity.ok(relatorioSemanalDTO);
+    }
+    @GetMapping("/servicodehoje")
+    public ResponseEntity<List<ServicosRealizado>> servicosDeHoje(){
+        List<ServicosRealizado> servicos = relatorioService.servicosRealizadoHoje();
+        log.info("Listando serviços realizados no dia de hoje!");
+        return ResponseEntity.ok(servicos);
     }
 
 }
