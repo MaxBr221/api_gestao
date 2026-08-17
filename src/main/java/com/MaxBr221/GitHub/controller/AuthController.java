@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,10 +26,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
     @PostMapping("/login")
-    public ResponseEntity<DadosTokenJWT> login(@RequestBody Login login){
-        DadosTokenJWT jwt = authService.login(login);
+    public ResponseEntity<DadosTokenJWT> login(@RequestBody Login login) throws HttpMessageNotReadableException {
+        DadosTokenJWT token = authService.login(login);
         log.info("Proprietario {} logando", login.login());
-        return ResponseEntity.ok(jwt);
+        return ResponseEntity.ok(token);
     }
 
 }
