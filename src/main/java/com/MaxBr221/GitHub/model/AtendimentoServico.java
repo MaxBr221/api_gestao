@@ -1,5 +1,6 @@
 package com.MaxBr221.GitHub.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class AtendimentoServico {
     @ManyToOne
     //recebe a chave estrangeira
     @JoinColumn(name = "atendimento_id")
+    @JsonBackReference
     private Atendimento atendimento;
     @ManyToOne
     @JoinColumn(name = "servico_id")

@@ -4,7 +4,6 @@ import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicosRealizado;
 import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.model.Atendimento;
-import com.MaxBr221.GitHub.model.AtendimentoServico;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,7 @@ public class RelatorioService {
         return montarRelatorio(atendimentosDoMes, primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
     }
     public RelatorioResponseDTO relatorioAnual(){
-        
+
         LocalDate hoje = LocalDate.now();
 
         LocalDate primeiroDia = hoje.withDayOfMonth(1);
@@ -100,8 +99,14 @@ public class RelatorioService {
             faturamentoRelatorio = faturamentoRelatorio.add(a.getValor());
             contAtendimentos ++;
         }
-        String atendimentoMaisFrequente = atendimentoServicoRepository.findServicoMaisRealizado(incio, fim);
-        return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, atendimentoMaisFrequente);
+        List<ServicosRealizado> servicos =
+                atendimentoServicoRepository.findServicoRealizado(incio, fim);
+
+        String servicoMaisRealizado =
+                servicos.isEmpty()
+                        ? null
+                        : servicos.get(0).nome();
+        return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, servicoMaisRealizado);
     }
     public List<ServicosRealizado> servicosRealizadoHoje(){
         LocalDate hoje = LocalDate.now();
@@ -109,7 +114,7 @@ public class RelatorioService {
         LocalDateTime inicio = hoje.atStartOfDay();
         LocalDateTime fim = hoje.atTime(LocalTime.MAX);
 
-        return atendimentoServicoRepository.findServicoRealizadoHoje(inicio, fim);
+        return atendimentoServicoRepository.findServicoRealizado(inicio, fim);
     }
 
 

@@ -5,12 +5,18 @@ import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Atendimento;
+import com.MaxBr221.GitHub.model.AtendimentoServico;
+import com.MaxBr221.GitHub.model.Proprietario;
+import com.MaxBr221.GitHub.model.Servico;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
+import com.MaxBr221.GitHub.repository.ProprietarioRepository;
+import com.MaxBr221.GitHub.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,15 +26,49 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AtendimentoService {
     private final AtendimentoRepository atendimentoRepository;
+    private final ProprietarioRepository proprietarioRepository;
+    private final ServicoRepository servicoRepository;
 
     //só admin (proprietario) manipula tudo
     @Transactional
-    public AtendimentoResponseDTO create(AtendimentoRequestDTO atendimentoRequestDTO){
-        if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
+    public AtendimentoResponseDTO create(AtendimentoRequestDTO dto) {
+        if (atendimentoRepository.existsByDataServico(dto.data())) {
             throw new EventFullException("Data de atendimento já ocupada!");
         }
         Atendimento atendimento = new Atendimento();
-        BeanUtils.copyProperties(atendimentoRequestDTO, atendimento);
+        atendimento.setDataServico(dto.data());
+        atendimento.setFormaPagamento(dto.formaPagamento());
+        atendimento.setObservacao(dto.observacao());
+        Proprietario proprietario = proprietarioRepository
+                .findById(dto.usuarioId())
+                .orElseThrow(() ->
+                        new RuntimeException("Proprietário não encontrado"));
+        atendimento.setProprietario(proprietario);
+
+        List<Servico> servicos =
+                servicoRepository.findAllById(dto.servicosIds());
+
+        BigDecimal valorTotal = servicos.stream()
+                .map(Servico::getPreco)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        atendimento.setValor(valorTotal);
+
+        List<AtendimentoServico> atendimentoServicos =
+                servicos.stream()
+                        .map(servico -> {
+
+                            AtendimentoServico atendimentoServico =
+                                    new AtendimentoServico();
+
+                            atendimentoServico.setAtendimento(atendimento);
+                            atendimentoServico.setServico(servico);
+                            atendimentoServico.setTotal(servico.getPreco());
+
+                            return atendimentoServico;
+                        })
+                        .toList();
+        atendimento.setAtendimentos(atendimentoServicos);
+
         Atendimento atendimentoSalvo = atendimentoRepository.save(atendimento);
         return new AtendimentoResponseDTO(atendimentoSalvo);
     }

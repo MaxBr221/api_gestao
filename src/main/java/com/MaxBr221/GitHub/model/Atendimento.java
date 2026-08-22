@@ -1,5 +1,6 @@
 package com.MaxBr221.GitHub.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Atendimento {
     private BigDecimal valor;
     private String observacao;
     @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<AtendimentoServico> atendimentos;
 
 
