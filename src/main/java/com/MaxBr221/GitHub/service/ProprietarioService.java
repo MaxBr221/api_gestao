@@ -5,7 +5,6 @@ import com.MaxBr221.GitHub.dtos.entitysDTO.ProprietarioResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Proprietario;
-import com.MaxBr221.GitHub.repository.BarbeiroRepository;
 import com.MaxBr221.GitHub.repository.ProprietarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProprietarioService {
     private final ProprietarioRepository proprietarioRepository;
-    private final BarbeiroRepository barbeiroRepository;
 
     public ProprietarioResponseDTO create(ProprietarioRequestDTO userDTO){
         if(proprietarioRepository.existsByLogin(userDTO.login())){

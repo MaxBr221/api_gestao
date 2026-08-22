@@ -22,9 +22,6 @@ public class Atendimento {
     @Column(name = "data", nullable = false)
     private LocalDateTime dataServico;
     @ManyToOne
-    @JoinColumn(name = "barbeiro_id")
-    private Barbeiro barbeiro;
-    @ManyToOne
     @JoinColumn(name = "proprietario_id")
     private Proprietario proprietario;
     @Enumerated(EnumType.STRING)

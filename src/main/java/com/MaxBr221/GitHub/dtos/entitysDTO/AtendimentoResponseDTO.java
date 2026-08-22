@@ -9,7 +9,6 @@ import java.util.List;
 public record AtendimentoResponseDTO(
         Long id,
         LocalDateTime dataServico,
-        Barbeiro barbeiro,
         Proprietario proprietario,
         FormaPagamento formaPagamento,
         BigDecimal valor,
@@ -18,7 +17,6 @@ public record AtendimentoResponseDTO(
 ) {
     public AtendimentoResponseDTO(Atendimento atendimento){
         this(atendimento.getIdAtendimento(), atendimento.getDataServico(),
-                atendimento.getBarbeiro(),
                 atendimento.getProprietario(),
                 atendimento.getFormaPagamento(),
                 atendimento.getValor(),

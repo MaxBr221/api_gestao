@@ -5,9 +5,7 @@ import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Atendimento;
-import com.MaxBr221.GitHub.model.Barbeiro;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
-import com.MaxBr221.GitHub.repository.BarbeiroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AtendimentoService {
     private final AtendimentoRepository atendimentoRepository;
-    private final BarbeiroRepository barbeiroRepository;
 
     //só admin (proprietario) manipula tudo
     @Transactional
@@ -30,8 +27,6 @@ public class AtendimentoService {
         if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
             throw new EventFullException("Data de atendimento já ocupada!");
         }
-        Barbeiro barbeiro = barbeiroRepository.findById(atendimentoRequestDTO.barbeiroId())
-                .orElseThrow(()-> new ResourceNotFoundException("Barbeiro não existente!"));
         Atendimento atendimento = new Atendimento();
         BeanUtils.copyProperties(atendimentoRequestDTO, atendimento);
         Atendimento atendimentoSalvo = atendimentoRepository.save(atendimento);
