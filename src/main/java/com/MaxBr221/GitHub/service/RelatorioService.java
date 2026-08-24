@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -84,10 +85,9 @@ public class RelatorioService {
                                 BigDecimal::add
                         )
                 ));
-        List<RelatorioSemanalResponseDTO> relatorios = faturamentoPorDia.entrySet()
-                .stream()
-                .map(atendimento -> new RelatorioSemanalResponseDTO(
-                        atendimento.getKey() ,atendimento.getValue()))
+        List<RelatorioSemanalResponseDTO> relatorios = Arrays.stream(DayOfWeek.values())
+                .map(dia -> new RelatorioSemanalResponseDTO(
+                        dia, faturamentoPorDia.getOrDefault(dia, BigDecimal.ZERO)))
                 .toList();
         return relatorios;
     }

@@ -32,11 +32,12 @@ public class AtendimentoService {
     //só admin (proprietario) manipula tudo
     @Transactional
     public AtendimentoResponseDTO create(AtendimentoRequestDTO dto) {
-        if (atendimentoRepository.existsByDataServico(dto.data())) {
-            throw new EventFullException("Data de atendimento já ocupada!");
-        }
+//        if (atendimentoRepository.existsByDataServico(dto.data())) {
+//            throw new EventFullException("Data de atendimento já ocupada!");
+//        }
         Atendimento atendimento = new Atendimento();
-        atendimento.setDataServico(dto.data());
+        LocalDateTime agora = LocalDateTime.now();
+        atendimento.setDataServico(agora);
         atendimento.setFormaPagamento(dto.formaPagamento());
         atendimento.setObservacao(dto.observacao());
         Proprietario proprietario = proprietarioRepository
@@ -92,12 +93,13 @@ public class AtendimentoService {
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
 
-        if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
-            throw new EventFullException("Data de atendimento já ocupada!");
-        }
+//        if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
+//            throw new EventFullException("Data de atendimento já ocupada!");
+//        }
         atendimento.setObservacao(atendimentoRequestDTO.observacao());
         atendimento.setFormaPagamento(atendimentoRequestDTO.formaPagamento());
-        atendimento.setDataServico(atendimentoRequestDTO.data());
+        LocalDateTime agora = LocalDateTime.now();
+        atendimento.setDataServico(agora);
         Atendimento atendimentoSalvo = atendimentoRepository.save(atendimento);
         return new AtendimentoResponseDTO(atendimentoSalvo);
     }
