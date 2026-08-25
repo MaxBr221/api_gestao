@@ -2,30 +2,31 @@ package com.MaxBr221.GitHub.service;
 
 import com.MaxBr221.GitHub.dtos.entitysDTO.ProprietarioRequestDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ProprietarioResponseDTO;
-import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Proprietario;
 import com.MaxBr221.GitHub.repository.ProprietarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProprietarioService {
     private final ProprietarioRepository proprietarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ProprietarioResponseDTO create(ProprietarioRequestDTO userDTO){
-        if(proprietarioRepository.existsByLogin(userDTO.login())){
-            throw new EventFullException("Usuário com login já existente!");
-        }
-        Proprietario usuario = new Proprietario();
-        BeanUtils.copyProperties(userDTO, userDTO);
-        Proprietario salvo = proprietarioRepository.save(usuario);
-        return new ProprietarioResponseDTO(salvo);
-    }
+//    public ProprietarioResponseDTO create(ProprietarioRequestDTO userDTO){
+//        if(proprietarioRepository.existsByLogin(userDTO.login())){
+//            throw new EventFullException("Usuário com login já existente!");
+//        }
+//        Proprietario usuario = new Proprietario();
+//        BeanUtils.copyProperties(userDTO, userDTO);
+//        Proprietario salvo = proprietarioRepository.save(usuario);
+//        return new ProprietarioResponseDTO(salvo);
+//    }
     public ProprietarioResponseDTO findById(Long id){
         Proprietario usuario = proprietarioRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
@@ -52,8 +53,15 @@ public class ProprietarioService {
         Proprietario userSalvo = proprietarioRepository.save(usuarioBuscado);
         return new ProprietarioResponseDTO(userSalvo);
     }
-
-    //criar novas funcionalidades de verPerfil
     //editar senha
+    public void mudarSenha(String login, String novaSenha){
+        Proprietario proprietario = proprietarioRepository.findByLogin(login)
+                .orElseThrow(()-> new ResourceNotFoundException("Login não encontrado!"));
+
+        String senhaCriptografada = passwordEncoder.encode(novaSenha);
+        proprietario.setSenha(senhaCriptografada);
+        proprietarioRepository.save(proprietario);
+
+    }
 
 }

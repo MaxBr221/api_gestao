@@ -21,4 +21,10 @@ public class ProprietarioController {
         log.info("Atualizando proprietário!");
         return ResponseEntity.ok(proprietario);
     }
+    @PostMapping
+    public ResponseEntity<Void> mudarSenha(@RequestBody String login, @RequestBody String novaSenha){
+        proprietarioService.mudarSenha(login, novaSenha);
+        log.info("Atualizando senha de {}!", login);
+        return ResponseEntity.noContent().build();
+    }
 }

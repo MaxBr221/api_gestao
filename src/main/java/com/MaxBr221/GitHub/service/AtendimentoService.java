@@ -2,7 +2,6 @@ package com.MaxBr221.GitHub.service;
 
 import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoRequestDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.AtendimentoResponseDTO;
-import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Atendimento;
 import com.MaxBr221.GitHub.model.AtendimentoServico;
@@ -12,7 +11,6 @@ import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.ProprietarioRepository;
 import com.MaxBr221.GitHub.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +27,8 @@ public class AtendimentoService {
     private final ProprietarioRepository proprietarioRepository;
     private final ServicoRepository servicoRepository;
 
-    //só admin (proprietario) manipula tudo
     @Transactional
     public AtendimentoResponseDTO create(AtendimentoRequestDTO dto) {
-//        if (atendimentoRepository.existsByDataServico(dto.data())) {
-//            throw new EventFullException("Data de atendimento já ocupada!");
-//        }
         Atendimento atendimento = new Atendimento();
         LocalDateTime agora = LocalDateTime.now();
         atendimento.setDataServico(agora);
@@ -93,9 +87,6 @@ public class AtendimentoService {
         Atendimento atendimento = atendimentoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
 
-//        if(atendimentoRepository.existsByDataServico(atendimentoRequestDTO.data())){
-//            throw new EventFullException("Data de atendimento já ocupada!");
-//        }
         atendimento.setObservacao(atendimentoRequestDTO.observacao());
         atendimento.setFormaPagamento(atendimentoRequestDTO.formaPagamento());
         LocalDateTime agora = LocalDateTime.now();

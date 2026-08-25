@@ -1,6 +1,5 @@
 package com.MaxBr221.GitHub.service;
 
-import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRealizadoDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoRequestDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicoResponseDTO;
 import com.MaxBr221.GitHub.exception.EventFullException;

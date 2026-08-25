@@ -21,7 +21,6 @@ public class AtendimentoServicoService {
         if(atendimentoServicoRepository.existsById(atendimento.atendimentoId())){
             throw new EventFullException("Atendimento já criado!");
         }
-
         AtendimentoServico novoAtendimento = new AtendimentoServico();
         BeanUtils.copyProperties(atendimento, novoAtendimento);
         AtendimentoServico atendimentoSalvo = atendimentoServicoRepository.save(novoAtendimento);
