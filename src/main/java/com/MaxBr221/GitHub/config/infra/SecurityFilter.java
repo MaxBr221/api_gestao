@@ -3,6 +3,9 @@ package com.MaxBr221.GitHub.config.infra;
 
 import com.MaxBr221.GitHub.model.Proprietario;
 import com.MaxBr221.GitHub.repository.ProprietarioRepository;
+import com.MaxBr221.GitHub.tenant.TenantContext;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 import java.util.Optional;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class SecurityFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
     private final ProprietarioRepository proprietarioRepository;
+    private final TenantContext tenantContext;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -41,7 +44,14 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             String login = tokenService.validateToken(token);
             if (login != null) {
+                DecodedJWT decodedJWT = JWT.decode(token);
+
+                Long tenantId = decodedJWT.getClaim("tenantId")
+                        .asLong();
+
+                TenantContext.setTenantId(tenantId);
                 Optional<Proprietario> proprietario = proprietarioRepository.findByLogin(login);
+
                 if (proprietario.isPresent()) {
                     var auth = new UsernamePasswordAuthenticationToken(
                             proprietario, null, proprietario.get().getAuthorities());

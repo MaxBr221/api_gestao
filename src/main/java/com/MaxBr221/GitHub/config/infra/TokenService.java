@@ -24,6 +24,8 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("api-gestao")
                     .withSubject(proprietario.getLogin())
+                    .withClaim("name", proprietario.getNome())
+                    .withClaim("tenantId", proprietario.getId())
                     .withExpiresAt(getExpiration())
                     .sign(algorithm);
             Long segundosExpiracao = dadosToken.getEpochSecond();
