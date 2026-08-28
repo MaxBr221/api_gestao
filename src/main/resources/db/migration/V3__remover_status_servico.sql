@@ -1,0 +1,2 @@
+ALTER TABLE servico
+DROP COLUMN status;

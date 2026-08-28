@@ -10,6 +10,7 @@ import com.MaxBr221.GitHub.model.Servico;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.ProprietarioRepository;
 import com.MaxBr221.GitHub.repository.ServicoRepository;
+import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,19 +30,23 @@ public class AtendimentoService {
 
     @Transactional
     public AtendimentoResponseDTO create(AtendimentoRequestDTO dto) {
+        Long tenantId = TenantContext.getTenantId();
         Atendimento atendimento = new Atendimento();
         LocalDateTime agora = LocalDateTime.now();
         atendimento.setDataServico(agora);
         atendimento.setFormaPagamento(dto.formaPagamento());
         atendimento.setObservacao(dto.observacao());
         Proprietario proprietario = proprietarioRepository
-                .findById(dto.usuarioId())
+                .findById(tenantId)
                 .orElseThrow(() ->
                         new RuntimeException("Proprietário não encontrado"));
         atendimento.setProprietario(proprietario);
 
         List<Servico> servicos =
-                servicoRepository.findAllById(dto.servicosIds());
+                servicoRepository.findAllByIdInAndProprietarioId(
+                        dto.servicosIds(),
+                        tenantId
+                );
 
         BigDecimal valorTotal = servicos.stream()
                 .map(Servico::getPreco)
@@ -68,23 +73,27 @@ public class AtendimentoService {
         return new AtendimentoResponseDTO(atendimentoSalvo);
     }
     public void delete(Long id){
-        Atendimento atendimento = atendimentoRepository.findById(id)
+        Long tenantId = TenantContext.getTenantId();
+        Atendimento atendimento = atendimentoRepository.findByIdAtendimentoAndProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
         atendimentoRepository.delete(atendimento);
     }
     public AtendimentoResponseDTO findById(Long id){
-        Atendimento atendimento = atendimentoRepository.findById(id)
+        Long tenantId = TenantContext.getTenantId();
+        Atendimento atendimento = atendimentoRepository.findByIdAtendimentoAndProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
         return new AtendimentoResponseDTO(atendimento);
     }
     public List<AtendimentoResponseDTO> findAll(){
-        return atendimentoRepository.findAll()
+        Long tenantId = TenantContext.getTenantId();
+        return atendimentoRepository.findAllByProprietarioId(tenantId)
                 .stream()
                 .map(atendimento -> new AtendimentoResponseDTO(atendimento))
                 .toList();
     }
     public AtendimentoResponseDTO update(Long id, AtendimentoRequestDTO atendimentoRequestDTO){
-        Atendimento atendimento = atendimentoRepository.findById(id)
+        Long tenantId = TenantContext.getTenantId();
+        Atendimento atendimento = atendimentoRepository.findByIdAtendimentoAndProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
 
         atendimento.setObservacao(atendimentoRequestDTO.observacao());
@@ -96,10 +105,10 @@ public class AtendimentoService {
     }
     // funcionalidade de listar atendimentos por um dia especifico
     public List<AtendimentoResponseDTO> listarAtendimentos(LocalDate dataAtendimento){
-
+        Long tenantId = TenantContext.getTenantId();
         LocalDateTime incio = dataAtendimento.atStartOfDay();
         LocalDateTime fim = dataAtendimento.atTime(LocalTime.MAX);
-        List<Atendimento> atendimentosList = atendimentoRepository.findByDataServicoBetween(incio, fim);
+        List<Atendimento> atendimentosList = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(tenantId ,incio, fim);
 
         if(atendimentosList.isEmpty()){
             throw new ResourceNotFoundException("Atendimentos não existente nessa data!");

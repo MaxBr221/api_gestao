@@ -23,46 +23,50 @@ import java.util.Optional;
 public class SecurityFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
     private final ProprietarioRepository proprietarioRepository;
-    private final TenantContext tenantContext;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
-            filterChain.doFilter(request, response);
-            return;
-        }
-        String path = request.getRequestURI();
 
-        if (path.startsWith("/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+       try{
+           if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+               response.setStatus(HttpServletResponse.SC_OK);
+               filterChain.doFilter(request, response);
+               return;
+           }
+           String path = request.getRequestURI();
 
-        String token = recoverToken(request);
+           if (path.startsWith("/auth")) {
+               filterChain.doFilter(request, response);
+               return;
+           }
 
-        if (token != null) {
-            String login = tokenService.validateToken(token);
-            if (login != null) {
-                DecodedJWT decodedJWT = JWT.decode(token);
+           String token = recoverToken(request);
 
-                Long tenantId = decodedJWT.getClaim("tenantId")
-                        .asLong();
+           if (token != null) {
+               String login = tokenService.validateToken(token);
+               if (login != null) {
+                   DecodedJWT decodedJWT = JWT.decode(token);
 
-                TenantContext.setTenantId(tenantId);
-                Optional<Proprietario> proprietario = proprietarioRepository.findByLogin(login);
+                   Long tenantId = decodedJWT.getClaim("tenantId")
+                           .asLong();
 
-                if (proprietario.isPresent()) {
-                    var auth = new UsernamePasswordAuthenticationToken(
-                            proprietario, null, proprietario.get().getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
-            }
+                   TenantContext.setTenantId(tenantId);
+                   Optional<Proprietario> proprietario = proprietarioRepository.findByLogin(login);
 
+                   if (proprietario.isPresent()) {
+                       var auth = new UsernamePasswordAuthenticationToken(
+                               proprietario, null, proprietario.get().getAuthorities());
+                       SecurityContextHolder.getContext().setAuthentication(auth);
+                   }
+               }
+               filterChain.doFilter(request, response);
 
-            filterChain.doFilter(request, response);
+           }
+       }finally {
+           TenantContext.clear();
 
-        }
+       }
+
     }
     private String recoverToken(HttpServletRequest request){
         String authHeader = request.getHeader("authorization");

@@ -5,9 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface AtendimentoRepository extends JpaRepository<Atendimento, Long> {
-    boolean existsByDataServico(LocalDateTime data);
-    List<Atendimento> findByDataServicoBetween(LocalDateTime inicio, LocalDateTime fim);
+    List<Atendimento> findByProprietarioIdAndDataServicoBetween(Long proprietarioId,
+                                                                LocalDateTime inicio,
+                                                                LocalDateTime fim);
 
+    Optional<Atendimento> findByIdAtendimentoAndProprietarioId(Long idAtendimento, Long proprietarioId);
+    List<Atendimento> findAllByProprietarioId(Long proprietarioId);
 }

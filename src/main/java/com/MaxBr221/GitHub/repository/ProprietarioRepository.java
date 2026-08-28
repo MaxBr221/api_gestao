@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ProprietarioRepository extends JpaRepository<Proprietario, Long> {
     Optional<Proprietario> findByLogin(String login);
     Boolean existsByLogin(String login);
+    Optional<Proprietario> findById(Long proprietarioId);
 }

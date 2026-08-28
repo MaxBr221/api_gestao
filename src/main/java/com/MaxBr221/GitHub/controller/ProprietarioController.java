@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class ProprietarioController {
     private final ProprietarioService proprietarioService;
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProprietarioResponseDTO> findById(@PathVariable Long id, @RequestBody ProprietarioRequestDTO proprietarioDTO){
-        ProprietarioResponseDTO proprietario = proprietarioService.update(id, proprietarioDTO);
+    @PutMapping("/update")
+    public ResponseEntity<ProprietarioResponseDTO> findById(@RequestBody ProprietarioRequestDTO proprietarioDTO){
+        ProprietarioResponseDTO proprietario = proprietarioService.update(proprietarioDTO);
         log.info("Atualizando proprietário!");
         return ResponseEntity.ok(proprietario);
     }

@@ -27,8 +27,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public ProprietarioResponseDTO cadastrarProprietario(Cadastro cadastro){
-        if(proprietarioRepository.existsByLogin(cadastro.login())){
+    public ProprietarioResponseDTO cadastrarProprietario(Cadastro cadastro) {
+        if (proprietarioRepository.existsByLogin(cadastro.login())) {
             throw new EventFullException("Proprietário já cadastrado!");
         }
         String senhaCriptografada = passwordEncoder.encode(cadastro.senha());

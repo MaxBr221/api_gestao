@@ -6,6 +6,7 @@ import com.MaxBr221.GitHub.exception.EventFullException;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.AtendimentoServico;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
+import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ public class AtendimentoServicoService {
     private final AtendimentoServicoRepository atendimentoServicoRepository;
 
     public AtendimentoServicoResponseDTO create(AtendimentoServicoRequestDTO atendimento){
-        if(atendimentoServicoRepository.existsById(atendimento.atendimentoId())){
+        Long tenantId = TenantContext.getTenantId();
+        if(atendimentoServicoRepository.existsByIdAndAtendimentoProprietarioId(atendimento.atendimentoId(),tenantId)){
             throw new EventFullException("Atendimento já criado!");
         }
         AtendimentoServico novoAtendimento = new AtendimentoServico();
@@ -28,18 +30,21 @@ public class AtendimentoServicoService {
 
     }
     public AtendimentoServicoResponseDTO findById(Long id){
-        AtendimentoServico atendimentoServico = atendimentoServicoRepository.findById(id)
+        Long tenantId = TenantContext.getTenantId();
+        AtendimentoServico atendimentoServico = atendimentoServicoRepository.findByIdAndAtendimentoProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
         return new AtendimentoServicoResponseDTO(atendimentoServico);
     }
     public List<AtendimentoServicoResponseDTO> findAll(){
-        return atendimentoServicoRepository.findAll()
+        Long tenantId = TenantContext.getTenantId();
+        return atendimentoServicoRepository.findAllByAtendimentoProprietarioId(tenantId)
                 .stream()
                 .map(atendimentoServico -> new AtendimentoServicoResponseDTO(atendimentoServico))
                 .toList();
     }
     public void delete(Long id){
-        AtendimentoServico atendimentoServico = atendimentoServicoRepository.findById(id)
+        Long tenantId = TenantContext.getTenantId();
+        AtendimentoServico atendimentoServico = atendimentoServicoRepository.findByIdAndAtendimentoProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Atendimento não encotrado!"));
         atendimentoServicoRepository.delete(atendimentoServico);
     }

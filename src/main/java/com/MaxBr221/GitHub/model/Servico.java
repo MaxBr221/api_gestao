@@ -22,9 +22,9 @@ public class Servico {
     private String nome;
     @Column(nullable = false)
     private BigDecimal preco;
-    @Enumerated(EnumType.STRING)
-    private Status status;
     private String descricao;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proprietario_id", nullable = false)
+    private Proprietario proprietario;
 
 }

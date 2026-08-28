@@ -6,6 +6,7 @@ import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.model.Atendimento;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
+import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,24 +28,22 @@ public class RelatorioService {
     private final AtendimentoRepository atendimentoRepository;
 
     public RelatorioResponseDTO relatorioDiario(){
-
+        Long tenantId = TenantContext.getTenantId();
         LocalDate hoje = LocalDate.now();
-
         LocalDateTime inicio = hoje.atStartOfDay();
         LocalDateTime fim = hoje.atTime(LocalTime.MAX);
 
-        List<Atendimento> atendimentosDoDia = atendimentoRepository.findByDataServicoBetween(inicio, fim);
+        List<Atendimento> atendimentosDoDia = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(tenantId, inicio, fim);
 
         return montarRelatorio(atendimentosDoDia, inicio, fim);
     }
 
     public RelatorioResponseDTO relatorioMensal(){
         LocalDate hoje = LocalDate.now();
-
         LocalDate primeiroDia = hoje.withDayOfMonth(1);
         LocalDate ultimoDia = hoje.withDayOfMonth(hoje.lengthOfMonth());
-        List<Atendimento> atendimentosDoMes = atendimentoRepository.findByDataServicoBetween(
-                primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
+        List<Atendimento> atendimentosDoMes = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(
+                getTenantId() ,primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
 
         return montarRelatorio(atendimentosDoMes, primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
     }
@@ -55,8 +54,8 @@ public class RelatorioService {
         LocalDate primeiroDia = hoje.withDayOfMonth(1);
         LocalDate ultimoDia = hoje.withDayOfYear(hoje.lengthOfYear());
 
-        List<Atendimento> atendimentosDoMes = atendimentoRepository.findByDataServicoBetween(
-                primeiroDia.atStartOfDay(),
+        List<Atendimento> atendimentosDoMes = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(
+                getTenantId() ,primeiroDia.atStartOfDay(),
                 ultimoDia.atTime(LocalTime.MAX));
 
         return montarRelatorio(atendimentosDoMes, primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
@@ -73,8 +72,10 @@ public class RelatorioService {
 
     private List<RelatorioSemanalResponseDTO> faturamentoSemanal(LocalDate segunda, LocalDate domingo){
 
-        List<Atendimento> atendimentoSemanais = atendimentoRepository.findByDataServicoBetween(
-                segunda.atStartOfDay(), domingo.atTime(LocalTime.MAX));
+        List<Atendimento> atendimentoSemanais = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(
+                getTenantId(),
+                segunda.atStartOfDay(),
+                domingo.atTime(LocalTime.MAX));
 
         Map<DayOfWeek, BigDecimal> faturamentoPorDia = atendimentoSemanais.stream()
                 .collect(Collectors.groupingBy(
@@ -99,8 +100,9 @@ public class RelatorioService {
             faturamentoRelatorio = faturamentoRelatorio.add(a.getValor());
             contAtendimentos ++;
         }
+        Long tenantId = TenantContext.getTenantId();
         List<ServicosRealizado> servicos =
-                atendimentoServicoRepository.findServicoRealizado(incio, fim);
+                atendimentoServicoRepository.findServicoRealizado(tenantId, incio, fim);
 
         String servicoMaisRealizado =
                 servicos.isEmpty()
@@ -109,12 +111,15 @@ public class RelatorioService {
         return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, servicoMaisRealizado);
     }
     public List<ServicosRealizado> servicosRealizadoHoje(){
+        Long tenantId = TenantContext.getTenantId();
         LocalDate hoje = LocalDate.now();
-
         LocalDateTime inicio = hoje.atStartOfDay();
         LocalDateTime fim = hoje.atTime(LocalTime.MAX);
 
-        return atendimentoServicoRepository.findServicoRealizado(inicio, fim);
+        return atendimentoServicoRepository.findServicoRealizado(tenantId, inicio, fim);
+    }
+    private Long getTenantId() {
+        return TenantContext.getTenantId();
     }
 
 

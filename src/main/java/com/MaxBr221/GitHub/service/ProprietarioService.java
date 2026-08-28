@@ -5,12 +5,12 @@ import com.MaxBr221.GitHub.dtos.entitysDTO.ProprietarioResponseDTO;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
 import com.MaxBr221.GitHub.model.Proprietario;
 import com.MaxBr221.GitHub.repository.ProprietarioRepository;
+import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,34 +18,9 @@ public class ProprietarioService {
     private final ProprietarioRepository proprietarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-//    public ProprietarioResponseDTO create(ProprietarioRequestDTO userDTO){
-//        if(proprietarioRepository.existsByLogin(userDTO.login())){
-//            throw new EventFullException("Usuário com login já existente!");
-//        }
-//        Proprietario usuario = new Proprietario();
-//        BeanUtils.copyProperties(userDTO, userDTO);
-//        Proprietario salvo = proprietarioRepository.save(usuario);
-//        return new ProprietarioResponseDTO(salvo);
-//    }
-    public ProprietarioResponseDTO findById(Long id){
-        Proprietario usuario = proprietarioRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
-        return new ProprietarioResponseDTO(usuario);
-    }
-    public List<ProprietarioResponseDTO> findAll(){
-        return proprietarioRepository.findAll()
-                .stream()
-                .map(usuario -> new ProprietarioResponseDTO(usuario))
-                .toList();
-    }
-    public void delete(Long id){
-        Proprietario usuario = proprietarioRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
-
-        proprietarioRepository.delete(usuario);
-    }
-    public ProprietarioResponseDTO update(Long id, ProprietarioRequestDTO userDTO){
-        Proprietario usuarioBuscado = proprietarioRepository.findById(id)
+    public ProprietarioResponseDTO update(ProprietarioRequestDTO userDTO){
+        Long tenantId = TenantContext.getTenantId();
+        Proprietario usuarioBuscado = proprietarioRepository.findById(tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Usuário não encontrado!"));
         usuarioBuscado.setNome(userDTO.nome());
         usuarioBuscado.setTelefone(userDTO.telefone());
