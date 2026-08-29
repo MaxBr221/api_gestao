@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface ProprietarioRepository extends JpaRepository<Proprietario, Long> {
     Optional<Proprietario> findByLogin(String login);
+    Optional<Proprietario> findByLoginAndTenantId(String login, Long tenantId);
     Boolean existsByLogin(String login);
-    Optional<Proprietario> findById(Long proprietarioId);
+    Optional<Proprietario> findById(Long tenantId);
 }

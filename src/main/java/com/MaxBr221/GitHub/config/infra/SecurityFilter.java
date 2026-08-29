@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
        try{
            if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
                response.setStatus(HttpServletResponse.SC_OK);
@@ -39,7 +37,6 @@ public class SecurityFilter extends OncePerRequestFilter {
                filterChain.doFilter(request, response);
                return;
            }
-
            String token = recoverToken(request);
 
            if (token != null) {
@@ -51,11 +48,14 @@ public class SecurityFilter extends OncePerRequestFilter {
                            .asLong();
 
                    TenantContext.setTenantId(tenantId);
-                   Optional<Proprietario> proprietario = proprietarioRepository.findByLogin(login);
 
-                   if (proprietario.isPresent()) {
+                   Proprietario proprietario = proprietarioRepository
+                           .findByLoginAndTenantId(login, tenantId)
+                           .orElse(null);
+
+                   if (proprietario != null) {
                        var auth = new UsernamePasswordAuthenticationToken(
-                               proprietario, null, proprietario.get().getAuthorities());
+                               proprietario, null, proprietario.getAuthorities());
                        SecurityContextHolder.getContext().setAuthentication(auth);
                    }
                }
@@ -64,7 +64,7 @@ public class SecurityFilter extends OncePerRequestFilter {
            }
        }finally {
            TenantContext.clear();
-
+           SecurityContextHolder.clearContext();
        }
 
     }

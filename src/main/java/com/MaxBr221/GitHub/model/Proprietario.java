@@ -27,13 +27,16 @@ public class Proprietario implements UserDetails {
     private Long id;
     @Column(nullable = false)
     private String nome;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String login;
     @Column(nullable = false)
     private String senha;
     private String telefone;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(nullable = false)
+    private Long tenantId;
+
 
     public Proprietario(Cadastro cadastro){
         BeanUtils.copyProperties(cadastro, this);
