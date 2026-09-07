@@ -1,8 +1,11 @@
+server:
+  port: ${PORT:8080}
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/gestao
-    username: postgres
-    password: 12345678
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/gestao}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:12345678}
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
