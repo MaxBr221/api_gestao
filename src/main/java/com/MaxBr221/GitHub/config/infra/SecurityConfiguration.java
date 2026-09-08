@@ -51,7 +51,9 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "https://gestao-front.vercel.app"
+
         ));
 
         configuration.setAllowedMethods(List.of(
