@@ -52,7 +52,8 @@ public class SecurityConfiguration {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "https://gestao-front.vercel.app"
+                "https://gestao-front.vercel.app",
+                "https://gestao-front-eight.vercel.app"
 
         ));
 
