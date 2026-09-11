@@ -2,7 +2,7 @@ package com.MaxBr221.GitHub.service;
 
 import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicosRealizado;
-import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.model.Atendimento;
 import com.MaxBr221.GitHub.repository.AtendimentoRepository;
 import com.MaxBr221.GitHub.repository.AtendimentoServicoRepository;
@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +26,8 @@ public class RelatorioService {
 
     public RelatorioResponseDTO relatorioDiario(){
         Long tenantId = TenantContext.getTenantId();
-        LocalDate hoje = LocalDate.now();
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+        LocalDate hoje = LocalDate.now(zone);
         LocalDateTime inicio = hoje.atStartOfDay();
         LocalDateTime fim = hoje.atTime(LocalTime.MAX);
 
@@ -39,7 +37,9 @@ public class RelatorioService {
     }
 
     public RelatorioResponseDTO relatorioMensal(){
-        LocalDate hoje = LocalDate.now();
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+
+        LocalDate hoje = LocalDate.now(zone);
         LocalDate primeiroDia = hoje.withDayOfMonth(1);
         LocalDate ultimoDia = hoje.withDayOfMonth(hoje.lengthOfMonth());
         List<Atendimento> atendimentosDoMes = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(
@@ -48,8 +48,9 @@ public class RelatorioService {
         return montarRelatorio(atendimentosDoMes, primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
     }
     public RelatorioResponseDTO relatorioAnual(){
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
 
-        LocalDate hoje = LocalDate.now();
+        LocalDate hoje = LocalDate.now(zone);
 
         LocalDate primeiroDia = hoje.withDayOfMonth(1);
         LocalDate ultimoDia = hoje.withDayOfYear(hoje.lengthOfYear());
@@ -61,7 +62,9 @@ public class RelatorioService {
         return montarRelatorio(atendimentosDoMes, primeiroDia.atStartOfDay(), ultimoDia.atTime(LocalTime.MAX));
     }
     public List<RelatorioSemanalResponseDTO> relatorioSemanal(){
-        LocalDate hoje = LocalDate.now();
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+
+        LocalDate hoje = LocalDate.now(zone);
         LocalDate segunda = hoje.with(
                 TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)
         );
@@ -112,7 +115,9 @@ public class RelatorioService {
     }
     public List<ServicosRealizado> servicosRealizadoHoje(){
         Long tenantId = TenantContext.getTenantId();
-        LocalDate hoje = LocalDate.now();
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+
+        LocalDate hoje = LocalDate.now(zone);
         LocalDateTime inicio = hoje.atStartOfDay();
         LocalDateTime fim = hoje.atTime(LocalTime.MAX);
 
@@ -121,6 +126,4 @@ public class RelatorioService {
     private Long getTenantId() {
         return TenantContext.getTenantId();
     }
-
-
 }

@@ -2,7 +2,7 @@ package com.MaxBr221.GitHub.controller;
 
 import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioSemanalResponseDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.ServicosRealizado;
-import com.MaxBr221.GitHub.dtos.relatorioDTO.RelatorioResponseDTO;
+import com.MaxBr221.GitHub.dtos.entitysDTO.RelatorioResponseDTO;
 import com.MaxBr221.GitHub.service.RelatorioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

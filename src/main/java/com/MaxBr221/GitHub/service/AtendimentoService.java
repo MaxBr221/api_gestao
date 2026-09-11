@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -31,8 +32,9 @@ public class AtendimentoService {
     @Transactional
     public AtendimentoResponseDTO create(AtendimentoRequestDTO dto) {
         Long tenantId = TenantContext.getTenantId();
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
         Atendimento atendimento = new Atendimento();
-        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime agora = LocalDateTime.now(zone);
         atendimento.setDataServico(agora);
         atendimento.setFormaPagamento(dto.formaPagamento());
         atendimento.setObservacao(dto.observacao());
@@ -98,7 +100,8 @@ public class AtendimentoService {
 
         atendimento.setObservacao(atendimentoRequestDTO.observacao());
         atendimento.setFormaPagamento(atendimentoRequestDTO.formaPagamento());
-        LocalDateTime agora = LocalDateTime.now();
+        ZoneId zone = ZoneId.of("America/Sao_Paulo");
+        LocalDateTime agora = LocalDateTime.now(zone);
         atendimento.setDataServico(agora);
         Atendimento atendimentoSalvo = atendimentoRepository.save(atendimento);
         return new AtendimentoResponseDTO(atendimentoSalvo);
