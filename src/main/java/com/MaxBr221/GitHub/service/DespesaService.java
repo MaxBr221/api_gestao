@@ -36,26 +36,26 @@ public class DespesaService {
 
     public DespesaResponseDTO findById(Long id){
         Long tenantId = TenantContext.getTenantId();
-        Despesa despesa = despesaRepository.findByIdDespesaAndProprietarioId(id, tenantId)
+        Despesa despesa = despesaRepository.findByIdAndProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Proprietario não existente!"));
         return new DespesaResponseDTO(despesa);
     }
     public List<DespesaResponseDTO> findAll(){
         Long tenantId = TenantContext.getTenantId();
-        return despesaRepository.findAllByDespensaProprietarioId(tenantId)
+        return despesaRepository.findAllByProprietarioId(tenantId)
                 .stream()
                 .map(despesa -> new DespesaResponseDTO(despesa))
                 .toList();
     }
     public void delete(Long id){
         Long tenantId = TenantContext.getTenantId();
-        Despesa despesa = despesaRepository.findByIdDespesaAndProprietarioId(id, tenantId)
+        Despesa despesa = despesaRepository.findByIdAndProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Proprietario não existente!"));
         despesaRepository.delete(despesa);
     }
     public DespesaResponseDTO update(Long id, DespesaRequestDTO despesaDTO){
         Long tenantId = TenantContext.getTenantId();
-        Despesa despesa = despesaRepository.findByIdDespesaAndProprietarioId(id, tenantId)
+        Despesa despesa = despesaRepository.findByIdAndProprietarioId(id, tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Proprietario não existente!"));
         despesa.setCategoria(despesaDTO.categoria());
         despesa.setDescricao(despesaDTO.descricao());

@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DespesaRepository extends JpaRepository<Despesa, Long> {
-    Optional<Despesa> findByIdDespesaAndProprietarioId(Long id, Long proprietarioId);
-    List<Despesa> findAllByDespensaProprietarioId(Long proprietarioId);
+    Optional<Despesa> findByIdAndProprietarioId(Long id, Long proprietarioId);
+    List<Despesa> findAllByProprietarioId(Long proprietarioId);
 }
