@@ -104,13 +104,13 @@ public class RelatorioService {
             contAtendimentos ++;
         }
         Long tenantId = TenantContext.getTenantId();
-        List<ServicosRealizado> servicos =
-                atendimentoServicoRepository.findServicoRealizado(tenantId, incio, fim);
+        List<ServicosRealizado> servicos = atendimentoServicoRepository.findServicoRealizado(tenantId, incio, fim);
 
         String servicoMaisRealizado =
                 servicos.isEmpty()
                         ? null
                         : servicos.get(0).nome();
+
         return new RelatorioResponseDTO(faturamentoRelatorio, contAtendimentos, servicoMaisRealizado);
     }
     public List<ServicosRealizado> servicosRealizadoHoje(){
