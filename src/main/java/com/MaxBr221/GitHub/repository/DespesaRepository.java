@@ -3,10 +3,12 @@ package com.MaxBr221.GitHub.repository;
 import com.MaxBr221.GitHub.model.Despesa;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface DespesaRepository extends JpaRepository<Despesa, Long> {
     Optional<Despesa> findByIdAndProprietarioId(Long id, Long proprietarioId);
     List<Despesa> findAllByProprietarioId(Long proprietarioId);
+    List<Despesa> findByDataBetweenAndProprietarioId(LocalDate inicio, LocalDate fim, Long proprietarioId);
 }
