@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -28,6 +30,18 @@ public class RelatorioDespesa {
         List<Despesa> despesa = despesaRepository.findAllByProprietarioId(tenantId);
 
         return montarRelatorio(despesa, primeiroDia, ultimoDia);
+
+    }
+    public RelatorioDespesaResponseDTO despesaSemanal(){
+        Long tenantId = TenantContext.getTenantId();
+
+        LocalDate hoje = LocalDate.now(zone);
+        LocalDate segunda = hoje.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate domingo = segunda.plusDays(6);
+
+        List<Despesa> despesas = despesaRepository.findByDataBetweenAndProprietarioId(segunda, domingo, tenantId);
+        return montarRelatorio(despesas, segunda, domingo);
+
 
     }
     public RelatorioDespesaResponseDTO despesaAnual(){

@@ -23,4 +23,11 @@ public class ValorFinalService {
 
         return faturamento.subtract(despesa);
     }
+    public BigDecimal calculaValorSemanal(){
+        BigDecimal faturamento = (BigDecimal) relatorioService.relatorioSemanal().iterator();
+        BigDecimal despesa = relatorioDespesa.despesaSemanal().valorDespesa();
+
+        return faturamento.subtract(despesa);
+
+    }
 }
