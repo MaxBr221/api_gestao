@@ -28,7 +28,7 @@ spring:
           auto: none
 
   flyway:
-    enabled: t  rue
+    enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
     schemas: public
