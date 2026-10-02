@@ -3,6 +3,7 @@ package com.MaxBr221.GitHub.service;
 import com.MaxBr221.GitHub.dtos.entitysDTO.DespesaRequestDTO;
 import com.MaxBr221.GitHub.dtos.entitysDTO.DespesaResponseDTO;
 import com.MaxBr221.GitHub.exception.ResourceNotFoundException;
+import com.MaxBr221.GitHub.exception.UnauthorizedException;
 import com.MaxBr221.GitHub.model.Despesa;
 import com.MaxBr221.GitHub.model.Proprietario;
 import com.MaxBr221.GitHub.repository.DespesaRepository;
@@ -10,7 +11,9 @@ import com.MaxBr221.GitHub.repository.ProprietarioRepository;
 import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,11 +22,14 @@ public class DespesaService {
     private final DespesaRepository despesaRepository;
     private final ProprietarioRepository proprietarioRepository;
 
+    @Transactional
     public void criarDespesa(DespesaRequestDTO despesaDTO){
         Long tenantId = TenantContext.getTenantId();
         Proprietario proprietario = proprietarioRepository.findById(tenantId)
                 .orElseThrow(()-> new ResourceNotFoundException("Proprietario não encontrado!"));
-
+        if(despesaDTO.data().isAfter(LocalDate.now())){
+            throw new UnauthorizedException("Não é possivel criar despesas futuras!");
+        }
         Despesa despesa = new Despesa();
         despesa.setDescricao(despesaDTO.descricao());
         despesa.setProprietario(proprietario);
