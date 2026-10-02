@@ -52,7 +52,7 @@ public class RelatorioService {
 
         LocalDate hoje = LocalDate.now(zone);
 
-        LocalDate primeiroDia = hoje.withDayOfMonth(1);
+        LocalDate primeiroDia = hoje.withDayOfYear(1);
         LocalDate ultimoDia = hoje.withDayOfYear(hoje.lengthOfYear());
 
         List<Atendimento> atendimentosDoMes = atendimentoRepository.findByProprietarioIdAndDataServicoBetween(
