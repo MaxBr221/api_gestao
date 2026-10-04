@@ -49,7 +49,7 @@ public class TokenService {
     }
 
     private Instant getExpiration(){
-        return Instant.now().plus(10, ChronoUnit.MINUTES);
+        return Instant.now().plus(12, ChronoUnit.HOURS);
     }
 
 }
