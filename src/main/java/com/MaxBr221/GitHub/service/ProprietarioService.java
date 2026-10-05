@@ -9,6 +9,8 @@ import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class ProprietarioService {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Transactional
     public ProprietarioResponseDTO update(ProprietarioRequestDTO userDTO){
         Long tenantId = TenantContext.getTenantId();
         Proprietario usuarioBuscado = proprietarioRepository.findById(tenantId)
@@ -29,6 +32,7 @@ public class ProprietarioService {
     }
     //editar senha
 
+    @Transactional
     public void mudarSenha(String login, String novaSenha){
         Long tenantId = TenantContext.getTenantId();
         Proprietario proprietario = proprietarioRepository.findByLoginAndTenantId(login, tenantId)

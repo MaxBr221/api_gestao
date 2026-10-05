@@ -12,6 +12,7 @@ import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ServicoService {
     private final ServicoRepository servicoRepository;
     private final ProprietarioRepository proprietarioRepository;
 
+    @Transactional
     public ServicoResponseDTO create(ServicoRequestDTO servicoRequestDTO){
         Long tenantId = TenantContext.getTenantId();
         if(servicoRepository.existsByNomeAndProprietarioId(servicoRequestDTO.nome(), tenantId)){
@@ -55,6 +57,7 @@ public class ServicoService {
                 .map(servico -> new ServicoResponseDTO(servico))
                 .toList();
     }
+    @Transactional
     public ServicoResponseDTO update(Long id, ServicoRequestDTO servicoRequestDTO){
         Long tenantId = TenantContext.getTenantId();
         Servico servico = servicoRepository.findByIdAndProprietarioId(id, tenantId)

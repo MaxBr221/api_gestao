@@ -59,6 +59,7 @@ public class DespesaService {
                 .orElseThrow(()-> new ResourceNotFoundException("Proprietario não existente!"));
         despesaRepository.delete(despesa);
     }
+    @Transactional
     public DespesaResponseDTO update(Long id, DespesaRequestDTO despesaDTO){
         Long tenantId = TenantContext.getTenantId();
         Despesa despesa = despesaRepository.findByIdAndProprietarioId(id, tenantId)

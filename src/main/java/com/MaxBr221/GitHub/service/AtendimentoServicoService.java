@@ -10,6 +10,7 @@ import com.MaxBr221.GitHub.tenant.TenantContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class AtendimentoServicoService {
     private final AtendimentoServicoRepository atendimentoServicoRepository;
 
+    @Transactional
     public AtendimentoServicoResponseDTO create(AtendimentoServicoRequestDTO atendimento){
         Long tenantId = TenantContext.getTenantId();
         if(atendimentoServicoRepository.existsByIdAndAtendimentoProprietarioId(atendimento.atendimentoId(),tenantId)){

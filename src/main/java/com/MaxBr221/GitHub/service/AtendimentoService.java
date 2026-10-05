@@ -93,6 +93,7 @@ public class AtendimentoService {
                 .map(atendimento -> new AtendimentoResponseDTO(atendimento))
                 .toList();
     }
+    @Transactional
     public AtendimentoResponseDTO update(Long id, AtendimentoRequestDTO atendimentoRequestDTO){
         Long tenantId = TenantContext.getTenantId();
         Atendimento atendimento = atendimentoRepository.findByIdAtendimentoAndProprietarioId(id, tenantId)
