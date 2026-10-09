@@ -25,7 +25,7 @@ public class TokenService {
                     .withIssuer("api-gestao")
                     .withSubject(proprietario.getLogin())
                     .withClaim("name", proprietario.getNome())
-                    .withClaim("tenantId", proprietario.getTenantId())
+                    .withClaim("tenantId", proprietario.getId())
                     .withExpiresAt(getExpiration())
                     .sign(algorithm);
             Long segundosExpiracao = dadosToken.getEpochSecond();

@@ -50,7 +50,7 @@ public class SecurityFilter extends OncePerRequestFilter {
                    TenantContext.setTenantId(tenantId);
 
                    Proprietario proprietario = proprietarioRepository
-                           .findByLoginAndTenantId(login, tenantId)
+                           .findByLogin(login)
                            .orElse(null);
 
                    if (proprietario != null) {
