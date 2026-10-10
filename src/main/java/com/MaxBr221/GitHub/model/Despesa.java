@@ -2,6 +2,10 @@ package com.MaxBr221.GitHub.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,6 +16,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@SQLDelete(sql = "UPDATE despesa SET ativo = false WHERE id = ?")
+@SQLRestriction("ativo = true")
 public class Despesa {
 
     @Id
@@ -36,4 +42,6 @@ public class Despesa {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "proprietario_id", nullable = false)
     private Proprietario proprietario;
+
+    private boolean ativo = true;
 }

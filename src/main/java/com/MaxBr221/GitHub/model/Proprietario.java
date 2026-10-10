@@ -12,6 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -20,6 +23,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE proprietario SET ativo = false WHERE id = ?")
+@SQLRestriction("ativo = true")
 public class Proprietario implements UserDetails {
     //admin
     @Id
@@ -36,6 +41,8 @@ public class Proprietario implements UserDetails {
     private Role role;
     @Column(nullable = false)
     private Long tenantId;
+
+    private boolean ativo = true;
 
 
     public Proprietario(Cadastro cadastro){

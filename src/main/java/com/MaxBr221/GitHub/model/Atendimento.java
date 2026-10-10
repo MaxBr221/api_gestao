@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE atendimento SET ativo = false WHERE id_atendimento = ?")
+@SQLRestriction("ativo = true")
 public class Atendimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +38,8 @@ public class Atendimento {
     @OneToMany(mappedBy = "atendimento", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<AtendimentoServico> atendimentos;
+
+    private boolean ativo = true;
 
 
 
